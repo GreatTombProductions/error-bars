@@ -1,0 +1,21 @@
+{
+  "name": "Error Bars",
+  "short_name": "error-bars",
+  "slug": "error-bars",
+  "description": "Small-area statistics with their margins: enter a county or ZIP and read every ACS estimate as estimate ± margin of error, with reliability flags, plain-language ranges, and a checker that tells you whether a published number is statistically distinguishable from what the survey can support.",
+  "url": "https://greattombproductions.github.io/error-bars/",
+  "repo": "https://github.com/GreatTombProductions/error-bars",
+  "github": "https://github.com/GreatTombProductions/error-bars",
+  "data_source": "U.S. Census Bureau — American Community Survey 2024 5-year detailed tables (api.census.gov/data/2024/acs/acs5) + 2020 ZCTA-to-county relationship file; snapshot pinned by 107 per-request receipts (bytes, rows, SHA-256)",
+  "data_url": "https://api.census.gov/data/2024/acs/acs5",
+  "records": "3,222 counties · 85,382 tracts · 242,297 block groups · 33,486 ZIP→county mappings; 11 statistics as estimate ± 90% margin; retrieved 2026-09-28",
+  "detail": "Check flow: search a county (or enter a 5-digit ZIP, mapped to counties by ZCTA land-area overlap; or browse by state) → county card, then census tracts and block groups as an expandable tree. Every statistic renders as estimate ± margin with the 90%-confidence range, a reliability flag (Census CV guidance for counts; a labeled display heuristic for medians), a distinguishable-from-zero line, and a per-stat box where any published number can be checked for statistical consistency. Method page: sources + receipts (107 requests, per-request SHA-256), variable list, margin arithmetic, coverage caveats, and the 'not applicable' margin convention.",
+  "asymmetry": "The Census publishes a margin of error with every ACS estimate; dashboards, market reports, and property platforms republish the estimate and drop the margin because precision optics sell and error bars don't. Renters, homebuyers, small-business operators, community organizations, and local journalists act on ranges masquerading as points — 'median household income $78,440' that is really consistent with roughly $74k-$83k, or a block-group count of 823 that is really 511-1,135. The tool restores the published uncertainty at the decision boundary where the number gets used.",
+  "pipeline_note": "Full-nation fetch: 107 receipted requests (multi-level wildcard queries per state for tract + block-group grain; one request each for states/counties; one crosswalk download). Jam-value handling: ACS 'not applicable' sentinels become null, never zero — most visibly, ~96% of county population margins are marked not-applicable and render as 'no published margin'. Some tables are not released at block-group grain (poverty) and some cells are absent for small areas; the UI types every absence ('no estimate published' vs 'no margin published') instead of fabricating. Static site, client-side only.",
+  "search_modes": ["county name search", "ZIP lookup", "state browse", "published-number checker"],
+  "released_date": "2026-09-28",
+  "status": "released",
+  "deploy_branch": "gh-pages",
+  "deploy_method": "static",
+  "feedback_categories": ["data", "methodology", "source-drift", "bug"]
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Error Bars — small-area statistics with their margins</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site"><div class="inner">
+  <a class="brand" href="index.html">Error Bars</a>
+  <nav><a href="index.html" class="active">Check</a><a href="method.html">Method</a></nav>
+</div></header>
+<main class="wrap">
+  <section id="home">
+    <h1>Every number is a range.</h1>
+    <p class="lede">The Census publishes a margin of error with every American Community Survey estimate.
+    Dashboards, market reports, and property platforms usually drop it. This tool restores it:
+    enter a county or ZIP, read every statistic as estimate&nbsp;±&nbsp;margin, and check a published number
+    against what the survey can actually support.</p>
+    <div class="card" id="searchCard">
+      <input type="text" id="q" placeholder="County name or 5-digit ZIP (e.g. Cook County · 90001)" autocomplete="off">
+      <div id="results"></div>
+      <div class="actions small muted">Try:
+        <a href="#county=17031">Cook County, IL</a> ·
+        <a href="#county=06037">Los Angeles County, CA</a> ·
+        <a href="#county=11001">District of Columbia</a>
+      </div>
+    </div>
+    <p class="small muted" id="metaLine"></p>
+    <h2>Browse by state</h2>
+    <div class="card">
+      <select id="stateSel" aria-label="Browse counties by state"></select>
+      <div id="stateList" class="reslist"></div>
+    </div>
+    <p class="small muted">What the margin means, which variables are included, and the snapshot receipt:
+    <a href="method.html">Method</a>.</p>
+  </section>
+  <section id="view" hidden></section>
+</main>
+<script src="stats.js"></script>
+<script src="common.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

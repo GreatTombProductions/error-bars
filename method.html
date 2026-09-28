@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Method — Error Bars</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site"><div class="inner">
+  <a class="brand" href="index.html">Error Bars</a>
+  <nav><a href="index.html">Check</a><a href="method.html" class="active">Method</a></nav>
+</div></header>
+<main class="wrap">
+  <h1>Method</h1>
+  <p class="lede">Where the numbers come from, what the margins mean, and the exact rules this tool applies.</p>
+
+  <h2>What this is</h2>
+  <p>The American Community Survey is a sample — it interviews a fraction of households and estimates
+  the rest. The Census Bureau publishes a <strong>margin of error</strong> with every estimate to say how
+  much sampling noise is in it. Most downstream products — market reports, dashboards, property platforms,
+  ranked lists — republish the estimate and drop the margin. This tool puts the margin back.</p>
+  <p id="vintageLine" class="muted small"></p>
+
+  <h2>How to read an estimate</h2>
+  <p>Every value here is shown as <strong>estimate ± margin</strong> with the implied 90%-confidence range.
+  A block-group population of <span class="mono">823 ± 312</span> means the survey cannot statistically
+  distinguish 823 from anything roughly between 511 and 1,135 — the estimate is that uncertain.</p>
+  <p>The <strong>reliability badge</strong> follows the Census Bureau's own guidance where it exists:</p>
+  <ul>
+    <li><strong>Counts:</strong> the coefficient of variation (CV = standard error / estimate, with
+    standard error = margin ÷ 1.645) below 15% reads as reliable; 15–30% as use-with-caution; above 30%
+    as unreliable.</li>
+    <li><strong>Medians</strong> (age, rent, home value, income): the Census publishes margins for medians
+    but no CV guidance; the badge here is an explicitly labeled display heuristic based on the margin's
+    size relative to the estimate. Read medians as ranges first.</li>
+  </ul>
+  <p>Where a value is missing, the ACS publishes no estimate for that geography (small places frequently
+  have no published values) — missing is not zero. Where a table is not released at block-group level
+  (poverty, for example), the cell says so rather than guessing.</p>
+  <p><strong>Cells without margins.</strong> Some cells carry no published margin — most notably the
+  population margin for about 96% of counties (the ACS marks those margins “not applicable”). Those cells
+  show the estimate alone and say so; no range or checker is fabricated. At block-group grain the ACS also
+  publishes no median rent for roughly 30% of areas and no median age for ~1% — the missingness is part of
+  the portrait, not an error to paper over.</p>
+
+  <h2>Check a published number</h2>
+  <p>Each statistic has a box for a number you found elsewhere. The rule applied:</p>
+  <ul>
+    <li><strong>Consistent</strong> if the number is within the estimate's margin (± margin), i.e.
+    |number − estimate| ≤ margin.</li>
+    <li><strong>Outside the margin</strong> if the gap is larger than the sampling error.</li>
+    <li><strong>Distinguishable from zero</strong> if |estimate| &gt; margin.</li>
+  </ul>
+  <p class="small muted">Caveat: comparing a single number to an estimate uses only the estimate's margin.
+  If the published number is itself a survey estimate with its own margin, the correct test compares the
+  difference to √(margin₁² + margin₂²) — both sides carry error, and the margin above understates the
+  combined uncertainty. The tool is deliberately conservative in the other direction for rounded numbers:
+  a rounded figure sitting exactly at the edge should be treated as inconclusive.</p>
+
+  <h2>Variables</h2>
+  <table class="varTable">
+    <thead><tr><th>Statistic</th><th>ACS table</th><th>Grain</th></tr></thead>
+    <tbody id="varTableBody"><tr><td colspan="3" class="muted small">Loading…</td></tr></tbody>
+  </table>
+
+  <h2>Coverage and caveats</h2>
+  <ul>
+    <li><strong>Geography:</strong> all counties, census tracts, and block groups in the 50 states,
+    District of Columbia, and Puerto Rico (2020 census geographies).</li>
+    <li><strong>ZIP lookup:</strong> ZIP codes are approximated to counties by land-area overlap of the
+    corresponding ZCTA (Census 2020 ZCTA–county relationship file). A ZIP that crosses county lines lists
+    each county, primary first. Neighborhoods within a ZIP can straddle tracts — pick the tract containing
+    your address via the Census Geocoder if precision matters.</li>
+    <li><strong>Sampling error only:</strong> margins cover sampling variability. They do not cover
+    non-sampling error (nonresponse, reporting, coverage) — the Census documents these separately.</li>
+    <li><strong>Period estimate:</strong> 5-year estimates are averages over 2020–2024, not a snapshot of
+    any single year. They are the only ACS products published for tracts and block groups.</li>
+    <li><strong>Medians:</strong> a sample median's uncertainty depends on the local distribution; the
+    published margin is the Census's own calculation. Small-area median margins can be very wide — that
+    width is the finding, not a defect.</li>
+    <li><strong>Rounding:</strong> displaying rounded values can make boundary comparisons look exact;
+    the test uses unrounded values.</li>
+  </ul>
+
+  <h2>Receipts</h2>
+  <p class="small">Snapshot fetched <span id="receiptDate" class="mono"></span> from
+  <a href="https://api.census.gov/data/2024/acs/acs5" rel="noopener">api.census.gov (2024 ACS 5-year detailed tables)</a>.
+  Per-request evidence (bytes, rows, SHA-256, timestamp) below; the fetch is reproducible from the
+  committed pipeline (<span class="mono">pipeline/fetch.py</span>).</p>
+  <table class="recTable">
+    <thead><tr><th>Level</th><th>Requests</th><th>Rows</th><th>Bytes</th><th>Fetched</th></tr></thead>
+    <tbody id="receiptsBody"><tr><td colspan="5" class="muted small">Loading…</td></tr></tbody>
+  </table>
+  <details id="receiptsDetail">
+    <summary class="small">Full request ledger (<span id="ledgerCount"></span> requests)</summary>
+    <div class="scrollbox"><table class="recTable small">
+      <thead><tr><th>Level</th><th>Path</th><th>Rows</th><th>Bytes</th><th>SHA-256</th><th>Fetched (UTC)</th></tr></thead>
+      <tbody id="ledgerBody"></tbody>
+    </table></div>
+  </details>
+
+  <h2>Attribution</h2>
+  <p class="small">Data: U.S. Census Bureau, American Community Survey — 2024 5-year estimates, retrieved
+  <span id="attribDate" class="mono"></span>. Census data is in the public domain. This site is a static,
+  client-side presentation of the published estimates and margins; it adds display and arithmetic, not
+  new data. Site code: MIT.</p>
+
+  <h2>Refresh</h2>
+  <p class="small muted">To refresh against a newer vintage: bump the year in
+  <span class="mono">pipeline/variables.py</span>, then run
+  <span class="mono">python3 pipeline/fetch.py &amp;&amp; python3 pipeline/build.py &amp;&amp; ./deploy.sh</span>.
+  The receipts table above regenerates with the new snapshot automatically.</p>
+</main>
+<script src="common.js"></script>
+<script src="method.js"></script>
+</body>
+</html>
